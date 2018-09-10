@@ -1,0 +1,10 @@
+distance_meters = int(input("Input distance in metres: "))
+distance_kilometers = int(distance_meters/1_000)
+distance_miles = float(distance_meters/1608)
+distance_nautical_miles = float(distance_meters/1852)
+
+print(f'Distance in meters: {distance_meters}')
+print(f'Distance in kilometers: {distance_kilometers}')
+print(f'Distance in miles: {distance_miles}')
+print(f'Distance in nautical miles: {distance_nautical_miles}')
+print(f'All: {distance_meters},{distance_kilometers},{distance_miles},{distance_nautical_miles}')
