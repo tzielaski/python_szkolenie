@@ -31,13 +31,11 @@ shuffle(data)
 
 species = dict()
 labels = list()
-dict_iterator = 0
 
 for record in data:
     rec_species = record[-1]
     if rec_species not in species.keys():
-        species[rec_species] = dict_iterator
-        dict_iterator += 1
+        species[rec_species] = len(species)
     labels.append(species.get(rec_species))
 
 species = {v: k for k, v in species.items()}
