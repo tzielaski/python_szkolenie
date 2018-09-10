@@ -32,13 +32,14 @@ def roman_to_arabic(roman_number):
 
     '''
     arabic_number = 0
-    for i in range(1, len(roman_number) - 1):
-        prev = roman_number[i - 1]
-        next = roman_number[i]
-        if prev >= next:
-            arabic_number += CONVERSION_TABLE[prev]
-        elif prev < next:
-            arabic_number -= CONVERSION_TABLE[prev]
+    if len(roman_number)>1:
+        for i in range(1, len(roman_number) - 1):
+            prev = roman_number[i - 1]
+            next = roman_number[i]
+            if prev >= next:
+                arabic_number += CONVERSION_TABLE[prev]
+            elif prev < next:
+                arabic_number -= CONVERSION_TABLE[prev]
     arabic_number += CONVERSION_TABLE[roman_number[-1]]
     return arabic_number
 
@@ -49,4 +50,5 @@ while True:
         break
     else:
         arabic_number = roman_to_arabic(roman_number)
+        print(roman_number[-1])
         print(arabic_number)
