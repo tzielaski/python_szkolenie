@@ -3,8 +3,7 @@ from time import sleep
 
 from oop_dragon_easy import Dragon, Status
 
-DRAGON_PNG = 'dragon.png'
-DRAGON_DEAD_PNG = 'dragon-dead.png'
+
 SCREEN_MIN_X = 0
 SCREEN_MAX_X = 1024
 SCREEN_MIN_Y = 0
@@ -19,9 +18,10 @@ class SuperDragon(Dragon):
         >>> (x,y) == (SCREEN_MAX_X, SCREEN_MAX_Y)
         True
 
-        >>> drag = SuperDragon(name='test')
-        >>> drag.move(left=SCREEN_MAX_X+1, up=SCREEN_MAX_Y+1); drag.get_position()
-        (0, 0)
+        >>> drag = SuperDragon(name='test'); drag.move(left=SCREEN_MAX_X+1, right=SCREEN_MAX_Y+1);
+        >>> (x,y) = drag.get_position()
+        >>> (x,y) == (SCREEN_MIN_X, SCREEN_MIN_Y)
+        True
 
         """
         self.set_position(
@@ -30,11 +30,11 @@ class SuperDragon(Dragon):
         )
 
     def set_position(self, x, y):
-        self.position_x = max(x, SCREEN_MIN_X)
-        self.position_y = max(y, SCREEN_MIN_Y)
+        self.position_x = x if x >= SCREEN_MIN_X else SCREEN_MIN_X
+        self.position_y = y if y >= SCREEN_MIN_Y else SCREEN_MIN_Y
 
-        self.position_x = min([self.position_x, SCREEN_MAX_X])
-        self.position_y = min([self.position_y, SCREEN_MAX_Y])
+        self.position_x = self.position_x if self.position_x <= SCREEN_MAX_X else SCREEN_MAX_X
+        self.position_y = self.position_y if self.position_y <= SCREEN_MAX_Y else SCREEN_MAX_Y
 
 
 class Hero:
@@ -68,10 +68,10 @@ class Hero:
         print(f'{self.name} hero is dead')
 
     def is_dead(self):
-        return True if self.status == Status.DEAD else False
+        return self.status == Status.DEAD
 
     def is_alive(self):
-        return True if self.status != Status.DEAD else False
+        return self.status != Status.DEAD
 
 
 if __name__ == '__main__':

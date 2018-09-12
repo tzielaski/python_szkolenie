@@ -1,8 +1,7 @@
 import random
 from enum import Enum
 
-DRAGON_PNG = 'dragon.png'
-DRAGON_DEAD_PNG = 'dragon-dead.png'
+
 
 
 class Status(Enum):
@@ -17,25 +16,28 @@ class Dragon:
     ATTACK_MAX = 20
     GOLD_MIN = 1
     GOLD_MAX = 100
+    DRAGON_PNG = 'dragon.png'
+    DRAGON_DEAD_PNG = 'dragon-dead.png'
 
     def __init__(self, name, position_x=0, position_y=0):
         self.name = name
         self.hit_points = random.randint(self.HIT_POINTS_MIN, self.HIT_POINTS_MAX)
         self.position_x = position_x
         self.position_y = position_y
-        self.texture = DRAGON_PNG
+        self.texture = self.DRAGON_PNG
         self.status = Status.ALIVE
 
     def take_damage(self, damage):
-        if self.is_alive():
-            self.hit_points -= damage
-            print(f'{self.name} dragon received {damage} dmg.')
-            if self.hit_points < 0:
-                self.die()
-            else:
-                print(f'{self.name} dragon HP left: {self.hit_points}\n')
-            return True
-        return False
+        if self.is_dead():
+            return False
+        self.hit_points -= damage
+        print(f'{self.name} dragon received {damage} dmg.')
+        if self.hit_points < 0:
+            self.die()
+        else:
+            print(f'{self.name} dragon HP left: {self.hit_points}\n')
+        return True
+
 
     def make_damage(self):
         return random.randint(self.ATTACK_MIN, self.ATTACK_MAX)
@@ -54,7 +56,7 @@ class Dragon:
 
     def die(self):
         self.status = Status.DEAD
-        self.texture = DRAGON_DEAD_PNG
+        self.texture = self.DRAGON_DEAD_PNG
         print(f'{self.name} dragon is dead')
         self.drop_possessions()
 
