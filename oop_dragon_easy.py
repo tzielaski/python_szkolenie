@@ -59,10 +59,10 @@ class Dragon:
         self.drop_possessions()
 
     def is_dead(self):
-        return True if self.status == Status.DEAD else False
+        return self.status == Status.DEAD
 
     def is_alive(self):
-        return True if self.status != Status.DEAD else False
+        return self.status != Status.DEAD
 
     def drop_possessions(self):
         gold_amt_left = random.randint(self.GOLD_MIN, self.GOLD_MAX)
