@@ -81,9 +81,12 @@ if __name__ == '__main__':
     jose = Hero(name='José Jiménez')
 
     while wawelski.is_alive() and jose.is_alive():
-        jose.take_damage(wawelski.make_damage())
+
+        dmg = wawelski.make_damage()
+        jose.take_damage(dmg)
         sleep(0.5)
         if jose.is_dead():
             break
-        wawelski.take_damage(jose.make_damage())
+        dmg = jose.make_damage()
+        wawelski.take_damage(dmg)
         sleep(0.5)
