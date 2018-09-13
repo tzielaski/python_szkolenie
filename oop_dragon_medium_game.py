@@ -4,6 +4,7 @@ import pygame
 
 from oop_dragon_easy import Dragon
 from oop_dragon_game_config import SCREEN_MIN_X, SCREEN_MAX_X, SCREEN_MIN_Y, SCREEN_MAX_Y
+from oop_dragon_game_gold import GoldGenerator
 from oop_interface_objects import InfoRectangle
 
 
@@ -71,4 +72,6 @@ class SuperDragon(Dragon):
             (int(self.DRAGON_PIC_SIZE_X * self.DRAGON_SIZE), int(self.DRAGON_PIC_SIZE_Y * self.DRAGON_SIZE))
         )
 
-
+    def drop_possessions(self):
+        gold = super().drop_possessions()
+        gold_coins = GoldGenerator.generate(number=gold, position=(self.position_x, self.position_y))

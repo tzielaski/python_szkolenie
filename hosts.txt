@@ -4,8 +4,9 @@
 #   - Windows: C:/Windows/System32/drivers/etc/hosts
 ##
 
-127.0.0.1       localhost
+127.0.0.1       localhost local this self
 127.0.0.1       astromatt
 10.13.37.1      nasa.gov esa.int roscosmos.ru
 255.255.255.255 broadcasthost
+127.0.0.1       oneandonly mycomputer
 ::1             localhost

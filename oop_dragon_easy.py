@@ -73,6 +73,7 @@ class Dragon:
 
     def drop_possessions(self):
         gold_amt_left = random.randint(self.GOLD_MIN, self.GOLD_MAX)
+        return gold_amt_left
         print(f'{self.name} dragon left {gold_amt_left} gold at {(self.get_position())}')
 
 

@@ -17,6 +17,7 @@ class Hero:
     PNG_SIZE_Y = 200
     SIZE = 1
     POSITION_DEFAULT = (SCREEN_MAX_X - PNG_SIZE_X, SCREEN_MAX_Y - PNG_SIZE_Y)
+    STEP = 30
 
     def __init__(self, name):
         self.position_x, self.position_y = self.POSITION_DEFAULT
@@ -73,7 +74,7 @@ class Hero:
         return self.position_x, self.position_y
 
     def move(self, up, left, right, down):
-        step = 10
+        step = self.STEP
         x, y = self.get_position()
         if up:
             y -= step

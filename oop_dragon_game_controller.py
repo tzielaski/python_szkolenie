@@ -1,4 +1,5 @@
 import sys
+from dataclasses import dataclass
 
 import pygame
 
@@ -24,8 +25,9 @@ def prepare_screen():
     return screen, background
 
 
-def resolve_pressed_keys():
-    if pygame.key.get_pressed()[pygame.K_a]:
+def resolve_pressed_keys(key_pressed):
+    if key_pressed == pygame.K_a:
+
         wawelski.random_move()
         dmg = wawelski.make_damage()
         jose.take_damage(dmg)
@@ -41,6 +43,18 @@ def resolve_pressed_keys():
             right=pressed[pygame.K_RIGHT],
             down=pressed[pygame.K_DOWN]
         )
+
+
+@dataclass
+class GameController:
+    drawable_objects = []
+
+    @classmethod
+    def add_drawable(self, object):
+        self.drawable_objects.append(object)
+
+    def get_drawables(self):
+        return self.drawable_objects
 
 
 if __name__ == '__main__':
@@ -61,4 +75,4 @@ if __name__ == '__main__':
 
             update_display(screen, background, objects)
             if event.type == pygame.KEYDOWN:
-                resolve_pressed_keys()
+                resolve_pressed_keys(event.key)
