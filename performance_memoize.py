@@ -11,13 +11,15 @@ def factorial(n: int) -> int:
 
 
 def run_factorial(n: int)-> int:
-    if n in CACHE.keys():
-        return CACHE[n]
+    cached = CACHE.get(n)
+    if cached:
+        return cached
     if n == 0:
         return 1
     else:
-        CACHE[n] = n * factorial(n - 1)
-        return CACHE[n]
+        result = n * factorial(n - 1)
+        CACHE[n] = result
+        return result
 
 
 stmt_no_cache = "" \
@@ -32,6 +34,10 @@ stmt_cache = "" \
              "run_factorial(450);" \
              "run_factorial(350)"
 
-print(timeit.timeit(stmt=stmt_no_cache, setup="from __main__ import factorial, run_factorial, CACHE", number=10000))
-print(timeit.timeit(stmt=stmt_cache, setup="from __main__ import factorial, run_factorial, CACHE", number=10000))
+duration_no_cache = timeit.timeit(stmt=stmt_no_cache, globals=globals(), number=10000)
+duration_cache = timeit.timeit(stmt=stmt_cache, globals=globals(), number=10000)
+
+print(f'Duration cache:    {duration_cache}')
+print(f'Duration no cache: {duration_no_cache}')
+print(f'{round(duration_no_cache/duration_cache)} times faster with cache.')
 
