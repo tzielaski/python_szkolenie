@@ -17,7 +17,7 @@ class Dragon:
     GOLD_MIN = 1
     GOLD_MAX = 100
     DRAGON_PNG = r'res/dragon.png'
-    DRAGON_DEAD_PNG = 'dragon-dead.png'
+    DRAGON_DEAD_PNG = r'res/dead-dragon.png'
     DRAGON_SIZE = 0.7
     DRAGON_PIC_SIZE_X = 200
     DRAGON_PIC_SIZE_Y = 200
@@ -37,6 +37,7 @@ class Dragon:
         self.hit_points -= damage
         print(f'{self.name} dragon received {damage} dmg.')
         if self.hit_points < 0:
+            self.hit_points = 0
             self.die()
         else:
             print(f'{self.name} dragon HP left: {self.hit_points}\n')
