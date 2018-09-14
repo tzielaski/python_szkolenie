@@ -1,5 +1,4 @@
 - support keeping a button pressed
 - add superclass Creatures for dragon and hero
 - animation
-- dragon leaving gold
 - hero collecting gold

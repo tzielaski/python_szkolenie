@@ -1,3 +1,5 @@
+from math import sqrt
+
 import pygame
 import random
 
@@ -18,6 +20,7 @@ class Hero:
     SIZE = 1
     POSITION_DEFAULT = (SCREEN_MAX_X - PNG_SIZE_X, SCREEN_MAX_Y - PNG_SIZE_Y)
     STEP = 30
+    ATTACK_RANGE = 150
 
     def __init__(self, name):
         self.position_x, self.position_y = self.POSITION_DEFAULT
@@ -25,7 +28,7 @@ class Hero:
         self.hit_points = random.randint(self.HIT_POINTS_MIN, self.HIT_POINTS_MAX)
         self.start_hit_points = self.hit_points
         self.status = Status.ALIVE
-        self.life_info = InfoRectangle(position=(0, SCREEN_MAX_Y - 32))
+        self.life_info = InfoRectangle(position_x=self.position_x, position_y=self.position_y)
         self.set_img(self.ALIVE_PNG)
 
     def take_damage(self, damage):
@@ -33,12 +36,19 @@ class Hero:
             return False
         self.hit_points -= damage
         print(f'{self.name} hero received {damage} dmg.')
-        if self.hit_points < 0:
+        if self.hit_points <= 0:
             self.hit_points = 0
             self.die()
         return True
 
-    def make_damage(self):
+    def make_damage(self, position):
+        if self.is_dead():
+            return 0
+        range_x = self.position_x - position[0]
+        range_y = self.position_y - position[1]
+        range_xy = sqrt(range_x ** 2 + range_y ** 2)
+        if range_xy > self.ATTACK_RANGE:
+            return 0
         return random.randint(self.ATTACK_MIN, self.ATTACK_MAX)
 
     def die(self):
@@ -53,7 +63,8 @@ class Hero:
         return self.status != Status.DEAD
 
     def update_life_info(self):
-        self.life_info.set_text(f'{self.name}: {self.hit_points}/{self.start_hit_points}')
+        self.life_info.set_text(f'{self.name}: {round(self.hit_points)}/{self.start_hit_points}')
+        self.life_info.set_position(self.position_x, self.position_y)
 
     def draw(self, surface: pygame.Surface):
         surface.blit(self.get_img(), self.get_position())

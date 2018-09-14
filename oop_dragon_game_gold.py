@@ -10,18 +10,22 @@ class Gold:
     position_x: int
     position_y: int
     img: pygame.Surface = None
-    GOLD_PNG = r'res\coing.png'
+    GOLD_PNG = r'res\coin.png'
     PIC_SIZE_X = 200
     PIX_SIZE_Y = 200
     PIC_SIZE = 0.1
-    MOVE_RANGE = 30
+    MOVE_RANGE = 50
 
-    def draw(self, surface):
+    def __init__(self, x, y):
+        self.position_x = x
+        self.position_y = y
         img = pygame.image.load(self.GOLD_PNG).convert_alpha()
         self.img = pygame.transform.scale(
             img,
             (int(self.PIC_SIZE_X * self.PIC_SIZE), int(self.PIX_SIZE_Y * self.PIC_SIZE))
         )
+
+    def draw(self, surface):
         surface.blit(self.get_img(), self.get_position())
 
     def set_position(self, x, y):
@@ -39,11 +43,25 @@ class Gold:
             'down': random.randint(0, self.MOVE_RANGE),
         }
         self.move(**moves)
+        return self
+
+    def move(self, left=0, right=0, down=0, up=0):
+        self.set_position(
+            self.position_x + right - left,
+            self.position_y + down - up
+        )
+
+    def get_img(self):
+        return self.img
+
+    def get_position(self):
+        return self.position_x, self.position_y
 
 
 class GoldGenerator:
     @classmethod
     def generate(cls, number, position):
+
         gold = []
         for i in range(0, number):
             gold.append(Gold(*position).random_move())

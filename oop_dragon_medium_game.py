@@ -13,7 +13,7 @@ class SuperDragon(Dragon):
         super().__init__(*args, **kwargs)
         self.start_hit_points = self.hit_points
         self.set_img(self.DRAGON_PNG)
-        self.life_info = InfoRectangle(position=(0, 0))
+        self.life_info = InfoRectangle(position_x=self.position_x, position_y=self.position_y)
 
     def move(self, left=0, right=0, down=0, up=0):
         """
@@ -44,6 +44,11 @@ class SuperDragon(Dragon):
     def get_img(self):
         return self.img
 
+    def get_middle_lower(self):
+        x = round(self.position_x + self.img.get_width()/2.)
+        y = self.position_y + self.img.get_height()
+        return x,y
+
     def random_move(self):
         moves = {
             'left': random.randint(0, self.MOVE_RANGE),
@@ -63,7 +68,8 @@ class SuperDragon(Dragon):
         self.life_info.draw(surface)
 
     def update_life_info(self):
-        self.life_info.set_text(f'{self.name}: {self.hit_points}/{self.start_hit_points}')
+        self.life_info.set_text(f'{self.name}: {round(self.hit_points)}/{self.start_hit_points}')
+        self.life_info.set_position(self.position_x, self.position_y)
 
     def set_img(self, png: str):
         img = pygame.image.load(png).convert_alpha()
@@ -72,6 +78,3 @@ class SuperDragon(Dragon):
             (int(self.DRAGON_PIC_SIZE_X * self.DRAGON_SIZE), int(self.DRAGON_PIC_SIZE_Y * self.DRAGON_SIZE))
         )
 
-    def drop_possessions(self):
-        gold = super().drop_possessions()
-        gold_coins = GoldGenerator.generate(number=gold, position=(self.position_x, self.position_y))

@@ -1,7 +1,6 @@
 import random
 from enum import Enum
-
-
+from math import sqrt
 
 
 class Status(Enum):
@@ -13,7 +12,7 @@ class Dragon:
     HIT_POINTS_MIN = 30
     HIT_POINTS_MAX = 40
     ATTACK_MIN = 5
-    ATTACK_MAX = 20
+    ATTACK_MAX = 50
     GOLD_MIN = 1
     GOLD_MAX = 100
     DRAGON_PNG = r'res/dragon.png'
@@ -22,6 +21,7 @@ class Dragon:
     DRAGON_PIC_SIZE_X = 200
     DRAGON_PIC_SIZE_Y = 200
     MOVE_RANGE = 100
+    ATTACK_RANGE = 120
 
     def __init__(self, name, position_x=0, position_y=0):
         self.name = name
@@ -30,21 +30,28 @@ class Dragon:
         self.position_y = position_y
         self.texture = self.DRAGON_PNG
         self.status = Status.ALIVE
+        self.gold = random.randint(self.GOLD_MIN, self.GOLD_MAX)
 
     def take_damage(self, damage):
         if self.is_dead():
             return False
         self.hit_points -= damage
         print(f'{self.name} dragon received {damage} dmg.')
-        if self.hit_points < 0:
+        if self.hit_points <= 0:
             self.hit_points = 0
             self.die()
         else:
             print(f'{self.name} dragon HP left: {self.hit_points}\n')
         return True
 
-
-    def make_damage(self):
+    def make_damage(self, position):
+        if self.is_dead():
+            return 0
+        range_x = self.position_x - position[0]
+        range_y = self.position_y - position[1]
+        range_xy = sqrt(range_x ** 2 + range_y ** 2)
+        if range_xy > self.ATTACK_RANGE:
+            return 0
         return random.randint(self.ATTACK_MIN, self.ATTACK_MAX)
 
     def set_position(self, x, y):
@@ -55,6 +62,7 @@ class Dragon:
     def get_position(self):
         return self.position_x, self.position_y
 
+
     def move(self, left=0, right=0, down=0, up=0):
         self.position_x += right - left
         self.position_y += down - up
@@ -62,8 +70,6 @@ class Dragon:
     def die(self):
         self.status = Status.DEAD
         self.texture = self.DRAGON_DEAD_PNG
-        print(f'{self.name} dragon is dead')
-        self.drop_possessions()
 
     def is_dead(self):
         return self.status == Status.DEAD
@@ -72,9 +78,15 @@ class Dragon:
         return self.status != Status.DEAD
 
     def drop_possessions(self):
-        gold_amt_left = random.randint(self.GOLD_MIN, self.GOLD_MAX)
-        return gold_amt_left
-        print(f'{self.name} dragon left {gold_amt_left} gold at {(self.get_position())}')
+        gold = self.gold
+        self.gold = 0
+        return gold
+
+    def has_possessions(self):
+        if self.gold > 0:
+            return True
+        else:
+            return False
 
 
 if __name__ == '__main__':
