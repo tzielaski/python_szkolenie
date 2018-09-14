@@ -17,6 +17,7 @@ class Hero:
     ATTACK_MAX = 15
     ALIVE_PNG = r'res\hero_alive.png'
     DEAD_PNG = r'res\hero_dead.png'
+    ATTACK_PNG = r'res\hero_attack.png'
     PNG_SIZE_X = 200
     PNG_SIZE_Y = 200
     SIZE = 1
@@ -24,7 +25,13 @@ class Hero:
     STEP = 30
     ATTACK_RANGE = 150
     GOLD_DEFAULT = 0
-    GOLD_INFO_POSITION = 0,0
+    GOLD_INFO_POSITION = 0, 0
+    ATTACK_STATUS_DURATION = 20
+    status_png_dict = {
+        Status.ALIVE: ALIVE_PNG,
+        Status.DEAD: DEAD_PNG,
+        Status.ATTACK: ATTACK_PNG
+    }
 
     def __init__(self, name):
         self.position_x, self.position_y = self.POSITION_DEFAULT
@@ -36,6 +43,7 @@ class Hero:
         self.set_img(self.ALIVE_PNG)
         self.gold = self.GOLD_DEFAULT
         self.gold_info = InfoRectangle(*self.GOLD_INFO_POSITION)
+        self.status_counter = 0
 
     def take_damage(self, damage):
         if self.is_dead():
@@ -48,6 +56,7 @@ class Hero:
         return True
 
     def make_damage(self, position):
+        self.set_status(Status.ATTACK)
         if self.is_dead():
             return 0
         range_x = self.position_x - position[0]
@@ -57,8 +66,13 @@ class Hero:
             return 0
         return random.randint(self.ATTACK_MIN, self.ATTACK_MAX)
 
+    def set_status(self, status: Status):
+        self.status = status
+        self.status_counter = 0
+        self.set_img(self.status_png_dict[status])
+
     def die(self):
-        self.status = Status.DEAD
+        self.set_status(Status.DEAD)
         print(f'{self.name} hero is dead')
         self.set_img(self.DEAD_PNG)
 
@@ -73,6 +87,11 @@ class Hero:
         self.life_info.set_position(self.position_x, self.position_y)
 
     def draw(self, surface: pygame.Surface):
+        if self.status == Status.ATTACK:
+            self.status_counter += 1
+            if self.status_counter >= self.ATTACK_STATUS_DURATION:
+                new_status = Status.ALIVE if self.hit_points > 0 else Status.DEAD
+                self.set_status(new_status)
         surface.blit(self.get_img(), self.get_position())
         self.update_life_info()
         self.life_info.draw(surface)

@@ -6,6 +6,7 @@ from math import sqrt
 class Status(Enum):
     ALIVE = 1
     DEAD = 0
+    ATTACK = 2
 
 
 class Dragon:
@@ -61,7 +62,6 @@ class Dragon:
 
     def get_position(self):
         return self.position_x, self.position_y
-
 
     def move(self, left=0, right=0, down=0, up=0):
         self.position_x += right - left

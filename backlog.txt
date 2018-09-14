@@ -1,4 +1,4 @@
-- support keeping a button pressed
 - add superclass Creatures for dragon and hero
 - animation
 - hero collecting gold - done 14.09.2018
+- support keeping a button pressed

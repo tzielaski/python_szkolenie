@@ -78,7 +78,7 @@ class GameController:
 if __name__ == '__main__':
     game_controller = GameController()
     wawelski = SuperDragon(name='Wawelski', position_x=0, position_y=0)
-    wawelski.set_position(x=100, y=200)
+    wawelski.set_position(x=300, y=300)
     game_controller.add_drawable(wawelski)
 
     jose = Hero(name='José Jiménez')
