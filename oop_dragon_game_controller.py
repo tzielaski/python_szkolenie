@@ -81,9 +81,9 @@ class GameController:
         return isinstance(object, Dragon)
 
     def move_dragons(self):
-        for drawable in self.drawable_objects:
-            if isinstance(drawable, Dragon):
-                drawable.random_move()
+        for dragon in self.drawable_objects:
+            if isinstance(dragon, Dragon):
+                dragon.random_move()
 
     def hero_attack(self):
         for hero in self.drawable_objects:
