@@ -1,4 +1,3 @@
-import pygame
 from enum import Enum
 
 SCREEN_MIN_X = 0
@@ -15,3 +14,10 @@ class Color(Enum):
     BLACK = 000000
     WHITE = 255, 255, 255
     GOLD = 255, 215, 0
+
+
+class Status(Enum):
+    ALIVE = 1
+    DEAD = 0
+    ATTACK = 2
+    MOVE = 3

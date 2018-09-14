@@ -1,16 +1,11 @@
-from math import sqrt
-
 import pygame
-import random
 
-from pygame.rect import Rect
-
-from oop_dragon_easy import Status
-from oop_dragon_game_config import SCREEN_MAX_Y, SCREEN_MAX_X, SCREEN_MIN_Y, SCREEN_MIN_X, Color
+from oop_dragon_game_config import SCREEN_MAX_Y, SCREEN_MAX_X, Color, Status
+from oop_dragon_game_creature import Creature
 from oop_dragon_game_interface_objects import InfoRectangle
 
 
-class Hero:
+class Hero(Creature):
     HIT_POINTS_MIN = 150
     HIT_POINTS_MAX = 200
     ATTACK_MIN = 1
@@ -25,9 +20,9 @@ class Hero:
     POSITION_DEFAULT = (SCREEN_MAX_X - PNG_SIZE_X, SCREEN_MAX_Y - PNG_SIZE_Y)
     STEP = 30
     ATTACK_RANGE = 150
-    GOLD_DEFAULT = 0
+    GOLD_MIN = 0
+    GOLD_MAX = 0
     GOLD_INFO_POSITION = 0, 0
-    STATUS_DURATION = 20
     status_png_dict = {
         Status.ALIVE: ALIVE_PNG,
         Status.DEAD: DEAD_PNG,
@@ -36,82 +31,15 @@ class Hero:
     }
 
     def __init__(self, name):
-        self.position_x, self.position_y = self.POSITION_DEFAULT
-        self.name = name
-        self.hit_points = random.randint(self.HIT_POINTS_MIN, self.HIT_POINTS_MAX)
-        self.start_hit_points = self.hit_points
-        self.status = Status.ALIVE
-        self.life_info = InfoRectangle(position_x=self.position_x, position_y=self.position_y)
-        self.set_img(self.ALIVE_PNG)
-        self.gold = self.GOLD_DEFAULT
+        super().__init__(name)
         self.gold_info = InfoRectangle(*self.GOLD_INFO_POSITION, color=Color.GOLD)
         self.status_counter = 0
-
-    def take_damage(self, damage):
-        if self.is_dead():
-            return False
-        self.hit_points -= damage
-        print(f'{self.name} hero received {damage} dmg.')
-        if self.hit_points <= 0:
-            self.hit_points = 0
-            self.die()
-        return True
-
-    def make_damage(self, position):
-        if self.is_dead():
-            return 0
-        self.set_status(Status.ATTACK)
-        range_x = self.position_x - position[0]
-        range_y = self.position_y - position[1]
-        range_xy = sqrt(range_x ** 2 + range_y ** 2)
-        if range_xy > self.ATTACK_RANGE:
-            return 0
-        return random.randint(self.ATTACK_MIN, self.ATTACK_MAX)
-
-    def set_status(self, status: Status):
-        self.status = status
-        self.status_counter = 0
-        self.set_img(self.status_png_dict[status])
-
-    def die(self):
-        self.set_status(Status.DEAD)
-        print(f'{self.name} hero is dead')
-        self.set_img(self.DEAD_PNG)
-
-    def is_dead(self):
-        return self.status == Status.DEAD
-
-    def is_alive(self):
-        return self.status != Status.DEAD
-
-    def update_life_info(self):
-        self.life_info.set_text(f'{self.name}: {round(self.hit_points)}/{self.start_hit_points}')
-        self.life_info.set_position(self.position_x, self.position_y)
+        self.set_position(*self.POSITION_DEFAULT)
 
     def draw(self, surface: pygame.Surface):
-        if self.status in (Status.ATTACK, Status.MOVE):
-            self.status_counter += 1
-            if self.status_counter >= self.STATUS_DURATION:
-                new_status = Status.ALIVE if self.hit_points > 0 else Status.DEAD
-                self.set_status(new_status)
-        surface.blit(self.get_img(), self.get_position())
-        self.update_life_info()
-        self.life_info.draw(surface)
+        super().draw(surface)
         self.update_gold_info()
         self.gold_info.draw(surface)
-
-    def set_img(self, png: str):
-        img = pygame.image.load(png).convert_alpha()
-        self.img = pygame.transform.scale(
-            img,
-            (int(self.PNG_SIZE_X * self.SIZE), int(self.PNG_SIZE_Y * self.SIZE))
-        )
-
-    def get_img(self):
-        return self.img
-
-    def get_position(self):
-        return self.position_x, self.position_y
 
     def move(self, up, left, right, down):
         if self.is_dead():
@@ -131,45 +59,14 @@ class Hero:
             x += step
         self.set_position(x, y)
 
-    def set_position(self, x, y):
-        self.position_x = x if x >= SCREEN_MIN_X else SCREEN_MIN_X
-        self.position_y = y if y >= SCREEN_MIN_Y else SCREEN_MIN_Y
-
-        self.position_x = self.position_x if self.position_x <= SCREEN_MAX_X else SCREEN_MAX_X
-        self.position_y = self.position_y if self.position_y <= SCREEN_MAX_Y else SCREEN_MAX_Y
-
-    def collides(self, position):
-        '''
-        >>> import oop_dragon_game_config as conf
-        >>> msg = pygame.init(); screen = pygame.display.set_mode((conf.SCREEN_MAX_X, conf.SCREEN_MAX_Y)); hero = Hero("TEST_HERO")
-        >>> center = hero.img.get_bounding_rect().center
-        >>> hero_pos = hero.get_position()
-        >>> hero.collides((center[0] + hero_pos[0], center[1] + hero_pos[1]))
-        1
-        >>> hero.collides((0,0))
-        0
-        '''
-        rectangle = self.img.get_bounding_rect().move(self.position_x, self.position_y)
-        return rectangle.collidepoint(position)
-
     def add_gold(self, number):
         self.gold += number
 
     def update_gold_info(self):
         self.gold_info.set_text(f'{self.name} gold: {self.gold}')
 
-    def drop_possessions(self):
-        gold = self.gold
-        self.gold = 0
-        return gold
-
-    def has_possessions(self):
-        if self.gold > 0:
-            return True
-        else:
-            return False
-
-    def get_middle_lower(self):
-        x = round(self.position_x + self.img.get_width() / 2.)
-        y = self.position_y + self.img.get_height()
-        return x, y
+    def make_damage(self, position):
+        range_x = self.position_x - position[0]
+        if range_x < 0:
+            return 0
+        return super().make_damage(position)

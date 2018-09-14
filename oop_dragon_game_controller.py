@@ -7,7 +7,7 @@ import pygame
 import oop_dragon_game_config as conf
 from oop_dragon_game_gold import GoldGenerator, Gold
 from oop_dragon_game_hero import Hero
-from oop_dragon_medium_game import SuperDragon
+from oop_dragon_medium_game import Dragon
 
 
 @dataclass
@@ -40,7 +40,7 @@ class GameController:
 
     def check_objects_state(self):
         for drawable in self.drawable_objects:
-            if isinstance(drawable, SuperDragon):
+            if isinstance(drawable, Dragon):
                 self.check_death(drawable)
             if isinstance(drawable, Hero):
                 self.check_death(drawable)
@@ -78,11 +78,11 @@ class GameController:
 
     @staticmethod
     def is_super_dragon(object):
-        return isinstance(object, SuperDragon)
+        return isinstance(object, Dragon)
 
     def move_dragons(self):
         for drawable in self.drawable_objects:
-            if isinstance(drawable, SuperDragon):
+            if isinstance(drawable, Dragon):
                 drawable.random_move()
 
     def hero_attack(self):
@@ -99,11 +99,11 @@ class GameController:
 
 if __name__ == '__main__':
     game_controller = GameController()
-    wawelski = SuperDragon(name='Wawelski', position_x=0, position_y=0)
+    wawelski = Dragon(name='Wawelski', position_x=0, position_y=0)
     wawelski.set_position(x=300, y=300)
     game_controller.add_drawable(wawelski)
 
-    ancalagon = SuperDragon(name='Ancalagon', position_x=500, position_y=200)
+    ancalagon = Dragon(name='Ancalagon', position_x=500, position_y=200)
     game_controller.add_drawable(ancalagon)
 
     jose = Hero(name='José Jiménez')

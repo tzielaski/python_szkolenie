@@ -1,8 +1,8 @@
 import random
 from time import sleep
 
-from oop_dragon_easy import Dragon, Status
-
+from oop_dragon_easy import Dragon
+from oop_dragon_game_config import Status
 
 SCREEN_MIN_X = 0
 SCREEN_MAX_X = 1024
