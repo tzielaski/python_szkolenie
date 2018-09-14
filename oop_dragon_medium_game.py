@@ -9,11 +9,14 @@ from oop_interface_objects import InfoRectangle
 
 
 class SuperDragon(Dragon):
+    MOVE_INTERVAL = 20
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.start_hit_points = self.hit_points
         self.set_img(self.DRAGON_PNG)
         self.life_info = InfoRectangle(position_x=self.position_x, position_y=self.position_y)
+        self.move_counter = 0
 
     def move(self, left=0, right=0, down=0, up=0):
         """
@@ -45,9 +48,9 @@ class SuperDragon(Dragon):
         return self.img
 
     def get_middle_lower(self):
-        x = round(self.position_x + self.img.get_width()/2.)
+        x = round(self.position_x + self.img.get_width() / 2.)
         y = self.position_y + self.img.get_height()
-        return x,y
+        return x, y
 
     def random_move(self):
         moves = {
@@ -66,6 +69,7 @@ class SuperDragon(Dragon):
         surface.blit(self.get_img(), self.get_position())
         self.update_life_info()
         self.life_info.draw(surface)
+        self.increase_move_counter()
 
     def update_life_info(self):
         self.life_info.set_text(f'{self.name}: {round(self.hit_points)}/{self.start_hit_points}')
@@ -78,3 +82,8 @@ class SuperDragon(Dragon):
             (int(self.DRAGON_PIC_SIZE_X * self.DRAGON_SIZE), int(self.DRAGON_PIC_SIZE_Y * self.DRAGON_SIZE))
         )
 
+    def increase_move_counter(self):
+        self.move_counter += 1
+        if self.move_counter >= self.MOVE_INTERVAL:
+            self.move_counter = 0
+            self.random_move()

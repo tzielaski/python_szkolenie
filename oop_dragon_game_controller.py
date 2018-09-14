@@ -1,3 +1,4 @@
+import os
 import sys
 from dataclasses import dataclass
 
@@ -7,26 +8,6 @@ import oop_dragon_game_config as conf
 from oop_dragon_game_gold import GoldGenerator, Gold
 from oop_dragon_game_hero import Hero
 from oop_dragon_medium_game import SuperDragon
-
-
-def resolve_pressed_keys(key_pressed):
-    if key_pressed == pygame.K_a:
-
-        wawelski.random_move()
-        dmg = wawelski.make_damage(jose.get_position())
-        jose.take_damage(dmg)
-
-        dmg = jose.make_damage(wawelski.get_position())
-        wawelski.take_damage(dmg)
-
-    else:
-        pressed = pygame.key.get_pressed()
-        jose.move(
-            up=pressed[pygame.K_UP],
-            left=pressed[pygame.K_LEFT],
-            right=pressed[pygame.K_RIGHT],
-            down=pressed[pygame.K_DOWN]
-        )
 
 
 @dataclass
@@ -74,12 +55,51 @@ class GameController:
                             self.drawable_objects.remove(collision_candidate)
                             hero.add_gold(1)
 
+    def resolve_pressed_keys(self, key_pressed):
+        if key_pressed == pygame.K_a:
+            self.hero_attack()
+        else:
+            pressed = pygame.key.get_pressed()
+            jose.move(
+                up=pressed[pygame.K_UP],
+                left=pressed[pygame.K_LEFT],
+                right=pressed[pygame.K_RIGHT],
+                down=pressed[pygame.K_DOWN]
+            )
+
+    @staticmethod
+    def is_hero(object):
+        return isinstance(object, Hero)
+
+    @staticmethod
+    def is_super_dragon(object):
+        return isinstance(object, SuperDragon)
+
+    def move_dragons(self):
+        for drawable in self.drawable_objects:
+            if isinstance(drawable, SuperDragon):
+                drawable.random_move()
+
+    def hero_attack(self):
+        for hero in self.drawable_objects:
+            if GameController.is_hero(hero):
+                dmg = 0
+                for dragon in self.drawable_objects:
+                    if GameController.is_super_dragon(dragon):
+                        dragon_dmg = hero.make_damage(dragon.get_position())
+                        dmg += dragon.make_damage(hero.get_position())
+                        dragon.take_damage(dragon_dmg)
+                hero.take_damage(dmg)
+
 
 if __name__ == '__main__':
     game_controller = GameController()
     wawelski = SuperDragon(name='Wawelski', position_x=0, position_y=0)
     wawelski.set_position(x=300, y=300)
     game_controller.add_drawable(wawelski)
+
+    ancalagon = SuperDragon(name='Ancalagon', position_x=700, position_y=200)
+    game_controller.add_drawable(ancalagon)
 
     jose = Hero(name='José Jiménez')
     game_controller.add_drawable(jose)
@@ -91,4 +111,4 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                resolve_pressed_keys(event.key)
+                game_controller.resolve_pressed_keys(event.key)

@@ -7,13 +7,14 @@ class Status(Enum):
     ALIVE = 1
     DEAD = 0
     ATTACK = 2
+    MOVE = 3
 
 
 class Dragon:
     HIT_POINTS_MIN = 30
     HIT_POINTS_MAX = 40
-    ATTACK_MIN = 5
-    ATTACK_MAX = 50
+    ATTACK_MIN = 10
+    ATTACK_MAX = 40
     GOLD_MIN = 1
     GOLD_MAX = 100
     DRAGON_PNG = r'res/dragon.png'
@@ -21,7 +22,7 @@ class Dragon:
     DRAGON_SIZE = 0.7
     DRAGON_PIC_SIZE_X = 200
     DRAGON_PIC_SIZE_Y = 200
-    MOVE_RANGE = 150
+    MOVE_RANGE = 50
     ATTACK_RANGE = 120
 
     def __init__(self, name, position_x=0, position_y=0):

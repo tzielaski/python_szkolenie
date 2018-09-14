@@ -11,13 +11,14 @@ from oop_interface_objects import InfoRectangle
 
 
 class Hero:
-    HIT_POINTS_MIN = 100
-    HIT_POINTS_MAX = 150
+    HIT_POINTS_MIN = 200
+    HIT_POINTS_MAX = 250
     ATTACK_MIN = 1
     ATTACK_MAX = 15
     ALIVE_PNG = r'res\hero_alive.png'
     DEAD_PNG = r'res\hero_dead.png'
     ATTACK_PNG = r'res\hero_attack.png'
+    MOVE_PNG = r'res\hero_walk.png'
     PNG_SIZE_X = 200
     PNG_SIZE_Y = 200
     SIZE = 1
@@ -26,11 +27,12 @@ class Hero:
     ATTACK_RANGE = 150
     GOLD_DEFAULT = 0
     GOLD_INFO_POSITION = 0, 0
-    ATTACK_STATUS_DURATION = 20
+    STATUS_DURATION = 20
     status_png_dict = {
         Status.ALIVE: ALIVE_PNG,
         Status.DEAD: DEAD_PNG,
-        Status.ATTACK: ATTACK_PNG
+        Status.ATTACK: ATTACK_PNG,
+        Status.MOVE: MOVE_PNG
     }
 
     def __init__(self, name):
@@ -56,9 +58,9 @@ class Hero:
         return True
 
     def make_damage(self, position):
-        self.set_status(Status.ATTACK)
         if self.is_dead():
             return 0
+        self.set_status(Status.ATTACK)
         range_x = self.position_x - position[0]
         range_y = self.position_y - position[1]
         range_xy = sqrt(range_x ** 2 + range_y ** 2)
@@ -87,9 +89,9 @@ class Hero:
         self.life_info.set_position(self.position_x, self.position_y)
 
     def draw(self, surface: pygame.Surface):
-        if self.status == Status.ATTACK:
+        if self.status in (Status.ATTACK, Status.MOVE):
             self.status_counter += 1
-            if self.status_counter >= self.ATTACK_STATUS_DURATION:
+            if self.status_counter >= self.STATUS_DURATION:
                 new_status = Status.ALIVE if self.hit_points > 0 else Status.DEAD
                 self.set_status(new_status)
         surface.blit(self.get_img(), self.get_position())
@@ -116,6 +118,7 @@ class Hero:
             step = 0
         else:
             step = self.STEP
+            self.set_status(Status.MOVE)
 
         x, y = self.get_position()
         if up:
