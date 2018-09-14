@@ -11,8 +11,8 @@ class Status(Enum):
 
 
 class Dragon:
-    HIT_POINTS_MIN = 30
-    HIT_POINTS_MAX = 40
+    HIT_POINTS_MIN = 20
+    HIT_POINTS_MAX = 50
     ATTACK_MIN = 10
     ATTACK_MAX = 40
     GOLD_MIN = 10

@@ -41,19 +41,24 @@ class GameController:
     def check_objects_state(self):
         for drawable in self.drawable_objects:
             if isinstance(drawable, SuperDragon):
-                super_dragon = drawable
-                if super_dragon.is_dead() and super_dragon.has_possessions():
-                    gold = super_dragon.drop_possessions()
-                    for coin in GoldGenerator.generate(gold, super_dragon.get_middle_lower()):
-                        self.add_drawable(coin)
+                self.check_death(drawable)
             if isinstance(drawable, Hero):
-                hero = drawable
-                for i, collision_candidate in enumerate(self.drawable_objects):
-                    if isinstance(collision_candidate, Gold):
-                        coin = collision_candidate
-                        if hero.collides(coin.get_center()):
-                            self.drawable_objects.remove(collision_candidate)
-                            hero.add_gold(1)
+                self.check_death(drawable)
+                self.check_hero_coin_collection(drawable)
+
+    def check_hero_coin_collection(self, hero):
+        for i, collision_candidate in enumerate(self.drawable_objects):
+            if isinstance(collision_candidate, Gold):
+                coin = collision_candidate
+                if hero.collides(coin.get_center()):
+                    self.drawable_objects.remove(collision_candidate)
+                    hero.add_gold(1)
+
+    def check_death(self, creature):
+        if creature.is_dead() and creature.has_possessions():
+            gold = creature.drop_possessions()
+            for coin in GoldGenerator.generate(gold, creature.get_middle_lower()):
+                self.add_drawable(coin)
 
     def resolve_pressed_keys(self, key_pressed):
         if key_pressed == pygame.K_a:

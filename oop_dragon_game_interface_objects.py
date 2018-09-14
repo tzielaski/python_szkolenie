@@ -17,7 +17,9 @@ class InfoRectangle:
     color: Color = Color.WHITE
 
     def draw(self, surface: pygame.Surface):
-        info_font = font.SysFont(font.get_default_font(), FONT_SIZE)
+        all_fonts = pygame.font.get_fonts()
+        info_font_name = 'comicsansms' if 'comicsansms' in all_fonts else None
+        info_font = font.SysFont(info_font_name, FONT_SIZE)
         text_img = info_font.render(self.info, True, self.color.value)
         surface.blit(text_img, (self.position_x, self.position_y))
 

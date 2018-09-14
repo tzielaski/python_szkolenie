@@ -157,3 +157,19 @@ class Hero:
 
     def update_gold_info(self):
         self.gold_info.set_text(f'{self.name} gold: {self.gold}')
+
+    def drop_possessions(self):
+        gold = self.gold
+        self.gold = 0
+        return gold
+
+    def has_possessions(self):
+        if self.gold > 0:
+            return True
+        else:
+            return False
+
+    def get_middle_lower(self):
+        x = round(self.position_x + self.img.get_width() / 2.)
+        y = self.position_y + self.img.get_height()
+        return x, y
