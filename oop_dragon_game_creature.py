@@ -120,8 +120,11 @@ class Creature:
         self.position_x = x if x >= SCREEN_MIN_X else SCREEN_MIN_X
         self.position_y = y if y >= SCREEN_MIN_Y else SCREEN_MIN_Y
 
-        self.position_x = self.position_x if self.position_x <= SCREEN_MAX_X else SCREEN_MAX_X
-        self.position_y = self.position_y if self.position_y <= SCREEN_MAX_Y else SCREEN_MAX_Y
+        max_x = SCREEN_MAX_X - self.img.get_bounding_rect().width
+        max_y = SCREEN_MAX_Y - self.img.get_bounding_rect().height
+
+        self.position_x = self.position_x if self.position_x <= max_x else max_x
+        self.position_y = self.position_y if self.position_y <= max_y else max_y
 
     def get_middle_lower(self):
         x = round(self.position_x + self.img.get_width() / 2.)

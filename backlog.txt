@@ -2,3 +2,4 @@
 - animation - something done on 14.09.2018
 - hero collecting gold - done 14.09.2018
 - *support keeping a button pressed
+- add collectible class (HP refill etc)
