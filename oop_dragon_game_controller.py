@@ -83,13 +83,13 @@ class GameController:
     def hero_attack(self):
         for hero in self.drawable_objects:
             if GameController.is_hero(hero):
-                dmg = 0
+                hero_dmg = 0
                 for dragon in self.drawable_objects:
                     if GameController.is_super_dragon(dragon):
                         dragon_dmg = hero.make_damage(dragon.get_position())
-                        dmg += dragon.make_damage(hero.get_position())
                         dragon.take_damage(dragon_dmg)
-                hero.take_damage(dmg)
+                        hero_dmg += dragon.make_damage(hero.get_position())
+                hero.take_damage(hero_dmg)
 
 
 if __name__ == '__main__':
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     wawelski.set_position(x=300, y=300)
     game_controller.add_drawable(wawelski)
 
-    ancalagon = SuperDragon(name='Ancalagon', position_x=700, position_y=200)
+    ancalagon = SuperDragon(name='Ancalagon', position_x=500, position_y=200)
     game_controller.add_drawable(ancalagon)
 
     jose = Hero(name='José Jiménez')
