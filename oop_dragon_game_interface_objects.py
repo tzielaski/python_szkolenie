@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from pygame import font
 
-from oop_dragon_game_config import Color, SCREEN_MIN_X, SCREEN_MIN_Y, SCREEN_MAX_X, SCREEN_MAX_Y
+from oop_dragon_game_config import Color, SCREEN_MIN_X, SCREEN_MIN_Y, SCREEN_MAX_X, SCREEN_MAX_Y, FONT_SIZE
 
 
 @dataclass
@@ -14,10 +14,11 @@ class InfoRectangle:
     size = DEFAULT_SIZE_X, DEFAULT_SIZE_Y
     position_x: int = 0
     position_y: int = 0
+    color: Color = Color.WHITE
 
     def draw(self, surface: pygame.Surface):
-        info_font = font.SysFont(font.get_default_font(), 32)
-        text_img = info_font.render(self.info, True, Color.WHITE.value)
+        info_font = font.SysFont(font.get_default_font(), FONT_SIZE)
+        text_img = info_font.render(self.info, True, self.color.value)
         surface.blit(text_img, (self.position_x, self.position_y))
 
     def get_position(self):

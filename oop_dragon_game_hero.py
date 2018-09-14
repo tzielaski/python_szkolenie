@@ -6,13 +6,13 @@ import random
 from pygame.rect import Rect
 
 from oop_dragon_easy import Status
-from oop_dragon_game_config import SCREEN_MAX_Y, SCREEN_MAX_X, SCREEN_MIN_Y, SCREEN_MIN_X
-from oop_interface_objects import InfoRectangle
+from oop_dragon_game_config import SCREEN_MAX_Y, SCREEN_MAX_X, SCREEN_MIN_Y, SCREEN_MIN_X, Color
+from oop_dragon_game_interface_objects import InfoRectangle
 
 
 class Hero:
-    HIT_POINTS_MIN = 200
-    HIT_POINTS_MAX = 250
+    HIT_POINTS_MIN = 150
+    HIT_POINTS_MAX = 200
     ATTACK_MIN = 1
     ATTACK_MAX = 15
     ALIVE_PNG = r'res\hero_alive.png'
@@ -44,7 +44,7 @@ class Hero:
         self.life_info = InfoRectangle(position_x=self.position_x, position_y=self.position_y)
         self.set_img(self.ALIVE_PNG)
         self.gold = self.GOLD_DEFAULT
-        self.gold_info = InfoRectangle(*self.GOLD_INFO_POSITION)
+        self.gold_info = InfoRectangle(*self.GOLD_INFO_POSITION, color=Color.GOLD)
         self.status_counter = 0
 
     def take_damage(self, damage):

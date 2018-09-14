@@ -15,8 +15,8 @@ class Dragon:
     HIT_POINTS_MAX = 40
     ATTACK_MIN = 10
     ATTACK_MAX = 40
-    GOLD_MIN = 1
-    GOLD_MAX = 100
+    GOLD_MIN = 10
+    GOLD_MAX = 40
     DRAGON_PNG = r'res/dragon.png'
     DRAGON_DEAD_PNG = r'res/dead-dragon.png'
     DRAGON_SIZE = 0.7
