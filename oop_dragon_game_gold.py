@@ -57,6 +57,15 @@ class Gold:
     def get_position(self):
         return self.position_x, self.position_y
 
+    def get_rect(self):
+        return self.img.get_bounding_rect()
+
+    def get_center(self):
+        center = self.get_rect()
+        x = self.position_x + center[0]
+        y = self.position_y + center[1]
+        return x,y
+
 
 class GoldGenerator:
     @classmethod

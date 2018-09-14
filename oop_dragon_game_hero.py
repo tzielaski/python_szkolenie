@@ -3,6 +3,8 @@ from math import sqrt
 import pygame
 import random
 
+from pygame.rect import Rect
+
 from oop_dragon_easy import Status
 from oop_dragon_game_config import SCREEN_MAX_Y, SCREEN_MAX_X, SCREEN_MIN_Y, SCREEN_MIN_X
 from oop_interface_objects import InfoRectangle
@@ -21,6 +23,8 @@ class Hero:
     POSITION_DEFAULT = (SCREEN_MAX_X - PNG_SIZE_X, SCREEN_MAX_Y - PNG_SIZE_Y)
     STEP = 30
     ATTACK_RANGE = 150
+    GOLD_DEFAULT = 0
+    GOLD_INFO_POSITION = 0,0
 
     def __init__(self, name):
         self.position_x, self.position_y = self.POSITION_DEFAULT
@@ -30,6 +34,8 @@ class Hero:
         self.status = Status.ALIVE
         self.life_info = InfoRectangle(position_x=self.position_x, position_y=self.position_y)
         self.set_img(self.ALIVE_PNG)
+        self.gold = self.GOLD_DEFAULT
+        self.gold_info = InfoRectangle(*self.GOLD_INFO_POSITION)
 
     def take_damage(self, damage):
         if self.is_dead():
@@ -70,6 +76,8 @@ class Hero:
         surface.blit(self.get_img(), self.get_position())
         self.update_life_info()
         self.life_info.draw(surface)
+        self.update_gold_info()
+        self.gold_info.draw(surface)
 
     def set_img(self, png: str):
         img = pygame.image.load(png).convert_alpha()
@@ -85,7 +93,11 @@ class Hero:
         return self.position_x, self.position_y
 
     def move(self, up, left, right, down):
-        step = self.STEP
+        if self.is_dead():
+            step = 0
+        else:
+            step = self.STEP
+
         x, y = self.get_position()
         if up:
             y -= step
@@ -103,3 +115,23 @@ class Hero:
 
         self.position_x = self.position_x if self.position_x <= SCREEN_MAX_X else SCREEN_MAX_X
         self.position_y = self.position_y if self.position_y <= SCREEN_MAX_Y else SCREEN_MAX_Y
+
+    def collides(self, position):
+        '''
+        >>> import oop_dragon_game_config as conf
+        >>> msg = pygame.init(); screen = pygame.display.set_mode((conf.SCREEN_MAX_X, conf.SCREEN_MAX_Y)); hero = Hero("TEST_HERO")
+        >>> center = hero.img.get_bounding_rect().center
+        >>> hero_pos = hero.get_position()
+        >>> hero.collides((center[0] + hero_pos[0], center[1] + hero_pos[1]))
+        1
+        >>> hero.collides((0,0))
+        0
+        '''
+        rectangle = self.img.get_bounding_rect().move(self.position_x, self.position_y)
+        return rectangle.collidepoint(position)
+
+    def add_gold(self, number):
+        self.gold += number
+
+    def update_gold_info(self):
+        self.gold_info.set_text(f'{self.name} gold: {self.gold}')

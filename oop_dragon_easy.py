@@ -20,7 +20,7 @@ class Dragon:
     DRAGON_SIZE = 0.7
     DRAGON_PIC_SIZE_X = 200
     DRAGON_PIC_SIZE_Y = 200
-    MOVE_RANGE = 100
+    MOVE_RANGE = 150
     ATTACK_RANGE = 120
 
     def __init__(self, name, position_x=0, position_y=0):

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import pygame
 
 import oop_dragon_game_config as conf
-from oop_dragon_game_gold import GoldGenerator
+from oop_dragon_game_gold import GoldGenerator, Gold
 from oop_dragon_game_hero import Hero
 from oop_dragon_medium_game import SuperDragon
 
@@ -65,6 +65,14 @@ class GameController:
                     gold = super_dragon.drop_possessions()
                     for coin in GoldGenerator.generate(gold, super_dragon.get_middle_lower()):
                         self.add_drawable(coin)
+            if isinstance(drawable, Hero):
+                hero = drawable
+                for i, collision_candidate in enumerate(self.drawable_objects):
+                    if isinstance(collision_candidate, Gold):
+                        coin = collision_candidate
+                        if hero.collides(coin.get_center()):
+                            self.drawable_objects.remove(collision_candidate)
+                            hero.add_gold(1)
 
 
 if __name__ == '__main__':
