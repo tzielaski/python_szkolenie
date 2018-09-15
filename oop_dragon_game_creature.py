@@ -24,7 +24,7 @@ class Creature:
     MOVE_RANGE: int
     ATTACK_RANGE: int
     img: pygame.Surface
-    STATUS_DURATION = 20
+    STATUS_DURATION = 2
 
     def __init__(self, name, position_x=0, position_y=0):
         self.name = name

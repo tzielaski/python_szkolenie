@@ -14,13 +14,13 @@ class Dragon(Creature):
     ALIVE_PNG = r'res/dragon.png'
     DEAD_PNG = r'res/dead-dragon.png'
     ATTACK_PNG = r'res/dragon.png'
-    MOVE_PNG = r'res/dragon_move.png'
+    MOVE_PNG = r'res/dragon.png'
     DRAGON_SIZE = 0.7
     PNG_SIZE_X = 200
     PNG_SIZE_Y = 200
     MOVE_RANGE = 30
     ATTACK_RANGE = 120
-    MOVE_INTERVAL = 100
+    MOVE_INTERVAL = random.randint(5, 15)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -1,6 +1,7 @@
 import os
 import sys
 from dataclasses import dataclass
+from time import sleep
 
 import pygame
 
@@ -27,6 +28,8 @@ class GameController:
 
     def prepare_screen(self):
         pygame.init()
+        pygame.mixer.init()
+        pygame.mixer.music.load(conf.HIT_SOUND)
         self.screen = pygame.display.set_mode((conf.SCREEN_MAX_X, conf.SCREEN_MAX_Y))
         self.background = pygame.image.load(r'res\background.jpg').convert()
 
@@ -63,6 +66,7 @@ class GameController:
     def resolve_pressed_keys(self, key_pressed):
         if key_pressed == pygame.K_a:
             self.hero_attack()
+            pygame.mixer.music.play(0)
         else:
             pressed = pygame.key.get_pressed()
             jose.move(
@@ -117,3 +121,4 @@ if __name__ == '__main__':
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 game_controller.resolve_pressed_keys(event.key)
+        sleep(0.025)

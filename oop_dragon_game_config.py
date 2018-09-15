@@ -7,6 +7,7 @@ SCREEN_MAX_Y = 768
 BACKGROUND_SIZE_X = 470
 BACKGROUND_SIZE_Y = 403
 FONT_SIZE = 16
+HIT_SOUND = r'res/hit.mp3'
 
 
 class Color(Enum):
